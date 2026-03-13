@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 import { toast } from "react-toastify";
@@ -18,7 +18,7 @@ function CreateCategoryComponent() {
                 })
                 .then((response) => {
                     resolve();
-                    navigate(-1);
+                    setTimeout(() => navigate(-1), 1000);
                 })
                 .catch((err) => {
                     reject(err.response.data.message);
@@ -39,21 +39,25 @@ function CreateCategoryComponent() {
     };
 
     return (
-        <Form onSubmit={handleSubmit}>
-            <h5>Create Category</h5>
-            <Form.Group className="mb-3" controlId="title">
-                <Form.Label>Category Name:</Form.Label>
-                <Form.Control
-                    type="text"
-                    placeholder="Category Name"
-                    required
-                    onChange={(e) => setName(e.target.value)}
-                />
-            </Form.Group>
-            <Button variant="primary" type="submit">
-                Submit
-            </Button>
-        </Form>
+        <Card>
+            <Card.Header className="bg-dark text-white">Create Category</Card.Header>
+            <Card.Body>
+                <Form onSubmit={handleSubmit}>
+                    <Form.Group className="mb-3" controlId="title">
+                        <Form.Label>Category Name:</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Category Name"
+                            required
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                    </Form.Group>
+                    <Button variant="primary" type="submit">
+                        Submit
+                    </Button>
+                </Form>
+            </Card.Body>
+        </Card>
     );
 }
 

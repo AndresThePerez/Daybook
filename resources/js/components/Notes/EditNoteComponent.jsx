@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 
@@ -64,7 +64,7 @@ function EditNoteComponent() {
                 })
                 .then((response) => {
                     resolve();
-                    navigate(-1);
+                    setTimeout(() => navigate(-1), 1000);
                 })
                 .catch((err) => {
                     reject(err.response.data.message);
@@ -94,53 +94,58 @@ function EditNoteComponent() {
     };
 
     return (
-        <Form onSubmit={handleSubmit}>
-            <h5>Edit Note</h5>
-            <Form.Group className="mb-3" controlId="category">
-                <Form.Label>Choose A category:</Form.Label>
-                <Form.Select
-                    aria-label="Default select"
-                    required
-                    onChange={(e) => setCategoryId(e.target.value)}
-                >
-                    <option>Please select a Category...</option>
-                    {categories.map((entity) => (
-                        <option
-                            selected={entity.id === category.id}
-                            value={entity.id}
+        <Card>
+            <Card.Header className="bg-dark text-white">Edit Note</Card.Header>
+            <Card.Body>
+                <Form onSubmit={handleSubmit}>
+                    <Form.Group className="mb-3" controlId="category">
+                        <Form.Label>Choose A Category:</Form.Label>
+                        <Form.Select
+                            aria-label="Default select"
+                            required
+                            onChange={(e) => setCategoryId(e.target.value)}
                         >
-                            {entity.name}
-                        </option>
-                    ))}
-                </Form.Select>
-            </Form.Group>
+                            <option>Please select a Category...</option>
+                            {categories.map((entity) => (
+                                <option
+                                    selected={entity.id === category.id}
+                                    value={entity.id}
+                                    key={entity.id}
+                                >
+                                    {entity.name}
+                                </option>
+                            ))}
+                        </Form.Select>
+                    </Form.Group>
 
-            <Form.Group className="mb-3" controlId="title">
-                <Form.Label>Note Title:</Form.Label>
-                <Form.Control
-                    type="text"
-                    placeholder="Note Title..."
-                    required
-                    defaultValue={note.title}
-                    onChange={(e) => setTitle(e.target.value)}
-                />
-            </Form.Group>
+                    <Form.Group className="mb-3" controlId="title">
+                        <Form.Label>Note Title:</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Note Title..."
+                            required
+                            defaultValue={note.title}
+                            onChange={(e) => setTitle(e.target.value)}
+                        />
+                    </Form.Group>
 
-            <Form.Group className="mb-3" controlId="body">
-                <Form.Label>Note Body:</Form.Label>
-                <Form.Control
-                    as="textarea"
-                    rows={3}
-                    required
-                    defaultValue={note.body}
-                    onChange={(e) => setBody(e.target.value)}
-                />
-            </Form.Group>
+                    <Form.Group className="mb-3" controlId="body">
+                        <Form.Label>Note Body:</Form.Label>
+                        <Form.Control
+                            as="textarea"
+                            rows={3}
+                            required
+                            defaultValue={note.body}
+                            onChange={(e) => setBody(e.target.value)}
+                        />
+                    </Form.Group>
 
-            <Button variant="primary" type="submit">
-                Submit
-            </Button>
-        </Form>
+                    <Button variant="primary" type="submit">
+                        Submit
+                    </Button>
+                </Form>
+            </Card.Body>
+        </Card>
     );
 }
 

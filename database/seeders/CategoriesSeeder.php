@@ -15,10 +15,21 @@ class CategoriesSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('categories')->insert([
-            'name' => 'Category 1',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        $categories = [
+            ['name' => 'Work'],
+            ['name' => 'Personal'],
+            ['name' => 'Shopping'],
+            ['name' => 'Health'],
+            ['name' => 'Finance'],
+            ['name' => 'Education'],
+        ];
+
+        foreach ($categories as $category) {
+            DB::table('categories')->insert([
+                'name' => $category['name'],
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
     }
 }

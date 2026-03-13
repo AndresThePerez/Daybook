@@ -45,8 +45,14 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function configureRateLimiting()
     {
+        // General API: 60 requests per minute
         RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+            return Limit::perMinute(60)->by($request->ip());
+        });
+
+        // Stricter limit for write operations (create, update, delete)
+        RateLimiter::for('api-write', function (Request $request) {
+            return Limit::perMinute(15)->by($request->ip());
         });
     }
 }

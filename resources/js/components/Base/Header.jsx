@@ -2,12 +2,12 @@ import React from "react";
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 
-const header = () => {
+const Header = () => {
     return (
-        <Navbar bg="light" expand="lg">
+        <Navbar bg="white" expand="lg" className="py-3">
             <Container>
                 <LinkContainer to="/">
-                    <Navbar.Brand className="me-auto">
+                    <Navbar.Brand className="me-auto fw-bold">
                         Note Application
                     </Navbar.Brand>
                 </LinkContainer>
@@ -32,4 +32,4 @@ const header = () => {
     );
 };
 
-export default header;
+export default Header;

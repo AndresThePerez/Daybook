@@ -1,6 +1,6 @@
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Spinner } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
@@ -12,13 +12,11 @@ function MainTable() {
     const [loadingData, setLoadingData] = useState(true);
 
     const columns = [
-        "ID",
-        "Category",
-        "Title",
-        "Body",
-        "Created At",
-        "Updated At",
-        "Action",
+        { label: "ID", width: "5%" },
+        { label: "Category", width: "15%" },
+        { label: "Title", width: "20%" },
+        { label: "Body", width: "40%" },
+        { label: "Action", width: "20%" },
     ];
 
     const [data, setData] = useState([]);
@@ -28,7 +26,6 @@ function MainTable() {
             axios
                 .get("/api/notes/showAll")
                 .then((response) => {
-                    console.log(response);
                     setData(response.data);
                     setLoadingData(false);
                     resolve();
@@ -50,7 +47,7 @@ function MainTable() {
 
     const deleteNote = (id) =>
         new Promise((resolve, reject) => {
-            if (confirm("do you really want to delete?")) {
+            if (confirm("Do you really want to delete this note?")) {
                 axios.delete("/api/notes/delete/" + id).then((response) => {
                     getNotes();
                     resolve();
@@ -71,63 +68,80 @@ function MainTable() {
         });
 
     return (
-        <Container>
-            <Row className="align-items-center mt-5">
-                <Col sm={10}>
-                    <h1>Notes</h1>
+        <div className="content-card">
+            <Row className="align-items-center mb-4">
+                <Col>
+                    <h1 className="page-title mb-0">Notes</h1>
                 </Col>
-                <Col xs={2} className="d-flex justify-content-end">
+                <Col xs="auto">
                     <Link to="/notes/create">
-                        <Button>New Note</Button>
+                        <Button variant="primary">New Note</Button>
                     </Link>
                 </Col>
             </Row>
             {loadingData ? (
-                <p>Loading Please wait...</p>
+                <div className="text-center py-5">
+                    <Spinner animation="border" variant="primary" />
+                    <p className="mt-2 text-muted">Loading...</p>
+                </div>
             ) : (
-                <Table striped bordered hover size="sm">
-                    <thead>
+                <Table striped bordered hover className="table-fixed">
+                    <colgroup>
+                        {columns.map((col) => (
+                            <col key={col.label} style={{ width: col.width }} />
+                        ))}
+                    </colgroup>
+                    <thead className="table-dark">
                         <tr>
-                            {columns.map((title) => (
-                                <th key={title}>{title}</th>
+                            {columns.map((col) => (
+                                <th key={col.label}>{col.label}</th>
                             ))}
                         </tr>
+                    </thead>
+                    <tbody>
                         {data.length
                             ? data.map((row) => (
-                                  <tr>
+                                  <tr key={row.id}>
                                       <td>{row.id}</td>
-                                      <td>{row.category.name}</td>
-                                      <td>{row.title}</td>
-                                      <td>{row.body}</td>
-                                      <td>{row.created_at}</td>
-                                      <td>{row.updated_at}</td>
+                                      <td title={row.category.name}>{row.category.name}</td>
+                                      <td title={row.title}>{row.title}</td>
+                                      <td title={row.body}>{row.body}</td>
                                       <td>
-                                          <Link to={"/notes/" + row.id}>
-                                              <Button variant="primary">
-                                                  View
-                                              </Button>{" "}
-                                          </Link>
-                                          <Link to={"/notes/edit/" + row.id}>
-                                              <Button variant="warning">
-                                                  Edit
-                                              </Button>{" "}
-                                          </Link>
-                                          <Button
-                                              variant="danger"
-                                              onClick={() =>
-                                                  handleDelete(row.id)
-                                              }
-                                          >
-                                              Delete
-                                          </Button>
+                                          <div className="action-buttons">
+                                              <Link to={"/notes/" + row.id}>
+                                                  <Button variant="outline-primary" size="sm">
+                                                      View
+                                                  </Button>
+                                              </Link>
+                                              <Link to={"/notes/edit/" + row.id}>
+                                                  <Button variant="outline-warning" size="sm">
+                                                      Edit
+                                                  </Button>
+                                              </Link>
+                                              <Button
+                                                  variant="outline-danger"
+                                                  size="sm"
+                                                  onClick={() =>
+                                                      handleDelete(row.id)
+                                                  }
+                                              >
+                                                  Delete
+                                              </Button>
+                                          </div>
                                       </td>
                                   </tr>
                               ))
-                            : ""}
-                    </thead>
+                            : (
+                                <tr>
+                                    <td colSpan={columns.length} className="text-center text-muted py-4">
+                                        No notes found. Create one to get started!
+                                    </td>
+                                </tr>
+                            )}
+                    </tbody>
                 </Table>
             )}
-        </Container>
+        </div>
     );
 }
 

@@ -1,7 +1,6 @@
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import { Row, Col } from "react-bootstrap";
-import Container from "react-bootstrap/Container";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
@@ -9,7 +8,11 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function ShowAllCategoriesComponent() {
-    const columns = ["ID", "Name", "Created At", "Updated At", "Action"];
+    const columns = [
+        { label: "ID", width: "10%" },
+        { label: "Name", width: "55%" },
+        { label: "Action", width: "35%" },
+    ];
 
     const [categories, setCategories] = useState([]);
 
@@ -35,7 +38,7 @@ function ShowAllCategoriesComponent() {
 
     const deleteCategory = (id) =>
         new Promise((resolve, reject) => {
-            if (confirm("do you really want to delete this category?")) {
+            if (confirm("Do you really want to delete this category?")) {
                 axios
                     .delete("/api/categories/delete/" + id)
                     .then((response) => {
@@ -58,49 +61,65 @@ function ShowAllCategoriesComponent() {
         });
 
     return (
-        <Container>
-            <Row className="align-items-center mt-5">
-                <Col sm={10}>
-                    <h1>Categories</h1>
+        <div className="content-card">
+            <Row className="align-items-center mb-4">
+                <Col>
+                    <h1 className="page-title mb-0">Categories</h1>
                 </Col>
-                <Col xs={2} className="d-flex justify-content-end">
+                <Col xs="auto">
                     <Link to="/categories/create">
-                        <Button>New Category</Button>
+                        <Button variant="primary">New Category</Button>
                     </Link>
                 </Col>
             </Row>
-            <Table striped bordered hover size="sm">
-                <thead>
+            <Table striped bordered hover className="table-fixed">
+                <colgroup>
+                    {columns.map((col) => (
+                        <col key={col.label} style={{ width: col.width }} />
+                    ))}
+                </colgroup>
+                <thead className="table-dark">
                     <tr>
-                        {columns.map((title) => (
-                            <th key={title}>{title}</th>
+                        {columns.map((col) => (
+                            <th key={col.label}>{col.label}</th>
                         ))}
                     </tr>
-                    {categories.map((row) => (
-                        <tr>
-                            <td>{row.id}</td>
-                            <td>{row.name}</td>
-                            <td>{row.created_at}</td>
-                            <td>{row.updated_at}</td>
-                            <td>
-                                <Link to={"/categories/" + row.id}>
-                                    <Button variant="primary">View</Button>{" "}
-                                </Link>
-                                <Link to={"/categories/edit/" + row.id}>
-                                    <Button variant="warning">Edit</Button>{" "}
-                                </Link>
-                                <Button
-                                    variant="danger"
-                                    onClick={() => handleDelete(row.id)}
-                                >
-                                    Delete
-                                </Button>
-                            </td>
-                        </tr>
-                    ))}
                 </thead>
+                <tbody>
+                    {categories.length
+                        ? categories.map((row) => (
+                            <tr key={row.id}>
+                                <td>{row.id}</td>
+                                <td title={row.name}>{row.name}</td>
+                                <td>
+                                    <div className="action-buttons">
+                                        <Link to={"/categories/" + row.id}>
+                                            <Button variant="outline-primary" size="sm">View</Button>
+                                        </Link>
+                                        <Link to={"/categories/edit/" + row.id}>
+                                            <Button variant="outline-warning" size="sm">Edit</Button>
+                                        </Link>
+                                        <Button
+                                            variant="outline-danger"
+                                            size="sm"
+                                            onClick={() => handleDelete(row.id)}
+                                        >
+                                            Delete
+                                        </Button>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))
+                        : (
+                            <tr>
+                                <td colSpan={columns.length} className="text-center text-muted py-4">
+                                    No categories found. Create one to get started!
+                                </td>
+                            </tr>
+                        )}
+                </tbody>
             </Table>
-        </Container>
+        </div>
     );
 }
 

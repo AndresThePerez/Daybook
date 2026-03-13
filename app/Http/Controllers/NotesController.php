@@ -24,7 +24,8 @@ class NotesController extends BaseController
     {
         // dd($request);
         if (!$this->validateRequest($request)) {
-            return response($request->errors(), 500);
+            return response('An internal error occured');
+            // return response($request->errors(), 500);
         }
 
         if (!$this->getModel()::create($request->all())) {

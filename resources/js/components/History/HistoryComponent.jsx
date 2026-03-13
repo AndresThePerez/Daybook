@@ -1,23 +1,29 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Table, Button } from "react-bootstrap";
+import { Row, Col, Table } from "react-bootstrap";
 
 function HistoryComponent() {
-    //set preliminary stuff
     const [noteHistory, setNoteHistory] = useState([]);
     const [categoryHistory, setCategoryHistory] = useState([]);
 
-    //card code columns I want to show :)
-    const noteColumns = ["ID", "Category", "Title", "Body", "Deleted at"];
-    const categoryColumns = ["ID", "Name", "Deleted at"];
+    const noteColumns = [
+        { label: "ID", width: "5%" },
+        { label: "Category", width: "15%" },
+        { label: "Title", width: "20%" },
+        { label: "Body", width: "35%" },
+        { label: "Deleted At", width: "25%" },
+    ];
+    const categoryColumns = [
+        { label: "ID", width: "15%" },
+        { label: "Name", width: "45%" },
+        { label: "Deleted At", width: "40%" },
+    ];
 
-    //probably should learn how to conslidate these hooks... another time.
     useEffect(() => {
         async function getNoteHistory() {
             await axios.get("/api/notes/history").then((response) => {
                 setNoteHistory(response.data);
             });
         }
-
         getNoteHistory();
     }, []);
 
@@ -27,64 +33,87 @@ function HistoryComponent() {
                 setCategoryHistory(response.data);
             });
         }
-
         getCategoryHistory();
     }, []);
 
     return (
-        <Container>
-            <Row>
-                <Col>
-                    <Row className="align-items-center mt-5">
-                        <Col sm={10}>
-                            <h1 className="text-center">Deleted Notes</h1>
-                        </Col>
-                    </Row>
-                    <Table striped bordered hover size="sm">
-                        <thead>
+        <Row className="g-4">
+            <Col lg={7}>
+                <div className="content-card">
+                    <h2 className="page-title mb-4">Deleted Notes</h2>
+                    <Table striped bordered hover className="table-fixed">
+                        <colgroup>
+                            {noteColumns.map((col) => (
+                                <col key={col.label} style={{ width: col.width }} />
+                            ))}
+                        </colgroup>
+                        <thead className="table-dark">
                             <tr>
-                                {noteColumns.map((title) => (
-                                    <th key={title}>{title}</th>
+                                {noteColumns.map((col) => (
+                                    <th key={col.label}>{col.label}</th>
                                 ))}
                             </tr>
-                            {noteHistory.map((row) => (
-                                <tr>
-                                    <td>{row.id}</td>
-                                    <td>{row.category.name}</td>
-                                    <td>{row.title}</td>
-                                    <td>{row.body}</td>
-                                    <td>{row.deleted_at}</td>
-                                </tr>
-                            ))}
                         </thead>
+                        <tbody>
+                            {noteHistory.length
+                                ? noteHistory.map((row) => (
+                                    <tr key={row.id}>
+                                        <td>{row.id}</td>
+                                        <td title={row.category.name}>{row.category.name}</td>
+                                        <td title={row.title}>{row.title}</td>
+                                        <td title={row.body}>{row.body}</td>
+                                        <td>{row.deleted_at}</td>
+                                    </tr>
+                                ))
+                                : (
+                                    <tr>
+                                        <td colSpan={noteColumns.length} className="text-center text-muted py-4">
+                                            No deleted notes.
+                                        </td>
+                                    </tr>
+                                )}
+                        </tbody>
                     </Table>
-                </Col>
+                </div>
+            </Col>
 
-                <Col>
-                    <Row className="align-items-center mt-5">
-                        <Col sm={10}>
-                            <h1 className="text-center">Deleted Categories</h1>
-                        </Col>
-                    </Row>
-                    <Table striped bordered hover size="sm">
-                        <thead>
+            <Col lg={5}>
+                <div className="content-card">
+                    <h2 className="page-title mb-4">Deleted Categories</h2>
+                    <Table striped bordered hover className="table-fixed">
+                        <colgroup>
+                            {categoryColumns.map((col) => (
+                                <col key={col.label} style={{ width: col.width }} />
+                            ))}
+                        </colgroup>
+                        <thead className="table-dark">
                             <tr>
-                                {categoryColumns.map((title) => (
-                                    <th key={title}>{title}</th>
+                                {categoryColumns.map((col) => (
+                                    <th key={col.label}>{col.label}</th>
                                 ))}
                             </tr>
-                            {categoryHistory.map((row) => (
-                                <tr>
-                                    <td>{row.id}</td>
-                                    <td>{row.name}</td>
-                                    <td>{row.deleted_at}</td>
-                                </tr>
-                            ))}
                         </thead>
+                        <tbody>
+                            {categoryHistory.length
+                                ? categoryHistory.map((row) => (
+                                    <tr key={row.id}>
+                                        <td>{row.id}</td>
+                                        <td title={row.name}>{row.name}</td>
+                                        <td>{row.deleted_at}</td>
+                                    </tr>
+                                ))
+                                : (
+                                    <tr>
+                                        <td colSpan={categoryColumns.length} className="text-center text-muted py-4">
+                                            No deleted categories.
+                                        </td>
+                                    </tr>
+                                )}
+                        </tbody>
                     </Table>
-                </Col>
-            </Row>
-        </Container>
+                </div>
+            </Col>
+        </Row>
     );
 }
 

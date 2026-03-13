@@ -1,21 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Card } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router-dom";
 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function EditCategoryComponent() {
-    //id passed in
     const { id } = useParams();
-
-    //use for navigating back?
     const navigate = useNavigate();
 
-    //category selected
     const [category, setCategory] = useState([]);
-
-    //name that is being changed... probably could juse use the one object I just declared.
     const [name, setName] = useState([]);
 
     //gotta make these promises so that toasts work.
@@ -47,7 +41,7 @@ function EditCategoryComponent() {
                 })
                 .then((response) => {
                     resolve();
-                    navigate(-1);
+                    setTimeout(() => navigate(-1), 1000);
                 })
                 .catch((err) => {
                     reject(err.response.data.message);
@@ -67,21 +61,25 @@ function EditCategoryComponent() {
     };
 
     return (
-        <Form onSubmit={handleSubmit}>
-            <h5>Edit Category</h5>
-            <Form.Group className="mb-3" controlId="title">
-                <Form.Label>Name:</Form.Label>
-                <Form.Control
-                    type="text"
-                    required
-                    defaultValue={category.name}
-                    onChange={(e) => setName(e.target.value)}
-                />
-            </Form.Group>
-            <Button variant="primary" type="submit">
-                Submit
-            </Button>
-        </Form>
+        <Card>
+            <Card.Header className="bg-dark text-white">Edit Category</Card.Header>
+            <Card.Body>
+                <Form onSubmit={handleSubmit}>
+                    <Form.Group className="mb-3" controlId="title">
+                        <Form.Label>Name:</Form.Label>
+                        <Form.Control
+                            type="text"
+                            required
+                            defaultValue={category.name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                    </Form.Group>
+                    <Button variant="primary" type="submit">
+                        Submit
+                    </Button>
+                </Form>
+            </Card.Body>
+        </Card>
     );
 }
 

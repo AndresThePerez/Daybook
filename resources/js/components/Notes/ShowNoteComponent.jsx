@@ -21,33 +21,35 @@ function ShowNoteComponent() {
 
     return (
         <Card>
-            <Card.Header> Note ID: {note.id} </Card.Header>
+            <Card.Header className="bg-dark text-white">
+                Note ID: {note.id}
+            </Card.Header>
             <Card.Body>
-                <Card.Title>Note Details</Card.Title>
-                <Card.Text>
-                    <Table>
+                <Card.Title className="mb-3">Note Details</Card.Title>
+                <Table bordered>
+                    <tbody>
                         <tr>
-                            <th>Category</th>
+                            <th className="bg-light" style={{ width: "20%" }}>Category</th>
                             <td>{category.name}</td>
                         </tr>
                         <tr>
-                            <th>Title</th>
+                            <th className="bg-light">Title</th>
                             <td>{note.title}</td>
                         </tr>
                         <tr>
-                            <th>Body</th>
-                            <td>{note.body}</td>
+                            <th className="bg-light">Body</th>
+                            <td style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{note.body}</td>
                         </tr>
                         <tr>
-                            <th>Created At</th>
+                            <th className="bg-light">Created At</th>
                             <td>{note.created_at}</td>
                         </tr>
                         <tr>
-                            <th>Updated At</th>
+                            <th className="bg-light">Updated At</th>
                             <td>{note.updated_at}</td>
                         </tr>
-                    </Table>
-                </Card.Text>
+                    </tbody>
+                </Table>
             </Card.Body>
         </Card>
     );

@@ -6,3 +6,64 @@
 
 // Bootstrap
 @import 'bootstrap/scss/bootstrap';
+
+// Custom styles
+.navbar {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.table-fixed {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.table-fixed td,
+.table-fixed th {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 0.75rem 1rem;
+    vertical-align: middle;
+    font-size: 0.9rem;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    overflow: visible;
+    text-overflow: clip;
+}
+
+td:has(.action-buttons) {
+    overflow: visible;
+    text-overflow: clip;
+}
+
+.card {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: none;
+}
+
+.content-card {
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    padding: 2rem;
+}
+
+.btn {
+    border-radius: 6px;
+}
+
+.table {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.page-title {
+    font-weight: 700;
+    color: #2d3748;
+}

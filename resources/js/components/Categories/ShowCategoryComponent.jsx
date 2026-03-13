@@ -19,25 +19,27 @@ function ShowCategoryComponent() {
 
     return (
         <Card>
-            <Card.Header> Category ID: {category.id} </Card.Header>
+            <Card.Header className="bg-dark text-white">
+                Category ID: {category.id}
+            </Card.Header>
             <Card.Body>
-                <Card.Title>Category Details</Card.Title>
-                <Card.Text>
-                    <Table>
+                <Card.Title className="mb-3">Category Details</Card.Title>
+                <Table bordered>
+                    <tbody>
                         <tr>
-                            <th>Name</th>
+                            <th className="bg-light" style={{ width: "20%" }}>Name</th>
                             <td>{category.name}</td>
                         </tr>
                         <tr>
-                            <th>Created At</th>
+                            <th className="bg-light">Created At</th>
                             <td>{category.created_at}</td>
                         </tr>
                         <tr>
-                            <th>Updated at</th>
+                            <th className="bg-light">Updated At</th>
                             <td>{category.updated_at}</td>
                         </tr>
-                    </Table>
-                </Card.Text>
+                    </tbody>
+                </Table>
             </Card.Body>
         </Card>
     );
