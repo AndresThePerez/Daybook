@@ -49,18 +49,6 @@ php artisan key:generate
 
 Open [http://localhost](http://localhost) in your browser.
 
-## Production Deployment
-
-This project includes Terraform configs for deploying to an AWS EC2 instance and a GitHub Actions workflow for automated deploys on push to `master`.
-
-See [`HANDOFF.md`](HANDOFF.md) for the full deployment guide.
-
-```bash
-# Production build and deploy (on the server)
-docker compose -f docker-compose.prod.yml up -d --build
-docker compose -f docker-compose.prod.yml exec app php artisan migrate --force
-```
-
 ## Project Structure
 
 ```
