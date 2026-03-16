@@ -1,6 +1,6 @@
-# Note Application
+# Basic To-Do List
 
-A full-stack note management application built with **Laravel 12** and **React 18**. Create, organize, and manage notes across custom categories with a clean, responsive interface.
+A full-stack to-do list application built with **Laravel 12** and **React 18**. Create, organize, and manage tasks across custom categories with a clean, responsive interface.
 
 ## Tech Stack
 
@@ -10,8 +10,8 @@ A full-stack note management application built with **Laravel 12** and **React 1
 
 ## Features
 
-- CRUD operations for notes and categories
-- Categorize notes with a flexible tagging system
+- CRUD operations for tasks and categories
+- Categorize tasks with a flexible tagging system
 - Soft deletes with a history/recycle bin view
 - Redis-backed caching for read endpoints
 - Rate limiting at both the Nginx and Laravel middleware layers

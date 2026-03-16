@@ -8,7 +8,7 @@ const Header = () => {
             <Container>
                 <LinkContainer to="/">
                     <Navbar.Brand className="me-auto fw-bold">
-                        Note Application
+                        Basic To-Do List
                     </Navbar.Brand>
                 </LinkContainer>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
