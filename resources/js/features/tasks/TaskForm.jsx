@@ -13,7 +13,7 @@ export default function TaskForm() {
   const { id } = useParams();
   const isEdit = Boolean(id);
   const navigate = useNavigate();
-  const { categories } = useAppData();
+  const { categories, reloadCategories } = useAppData();
   const [form, setForm] = useState({ title: '', body: '', category_id: '' });
   const [errors, setErrors] = useState({});
 
@@ -37,6 +37,7 @@ export default function TaskForm() {
     try {
       await (isEdit ? tasks.update(id, form) : tasks.create(form));
       toast.success('Task saved');
+      reloadCategories();
       navigate('/');
     } catch (err) {
       const v = validationErrors(err);

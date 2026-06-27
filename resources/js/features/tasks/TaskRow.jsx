@@ -6,14 +6,17 @@ import CategoryTag from '../../components/ui/CategoryTag';
 import TimeBar from '../../components/ui/TimeBar';
 import KeptChip from '../../components/ui/KeptChip';
 import { tasks } from '../../lib/api';
+import { useAppData } from '../../AppData';
 
 export default function TaskRow({ task, onDeleted }) {
+  const { reloadCategories } = useAppData();
   async function handleDelete() {
     if (!window.confirm('Delete this task?')) return;
     try {
       await tasks.remove(task.id);
       toast.success('Task deleted');
       onDeleted(task.id);
+      reloadCategories();
     } catch {
       toast.error('Could not delete the task');
     }

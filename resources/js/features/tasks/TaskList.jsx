@@ -48,6 +48,11 @@ export default function TaskList() {
         <Link to="/tasks/create"><Button><span className="text-lg leading-none">+</span> New task</Button></Link>
       </header>
 
+      <div className="mb-3 flex gap-4 pl-1 text-[11.5px] text-ink-soft">
+        <span className="inline-flex items-center gap-1.5"><span className="h-1 w-6 rounded ttl-fill inline-block" /> time left in its 12h life</span>
+        <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full border border-kept inline-block" /> kept — never expires</span>
+      </div>
+
       {loading && items.length === 0 ? <Spinner /> : items.length === 0 ? (
         <EmptyState
           title="Nothing on today's list. Add the first task."

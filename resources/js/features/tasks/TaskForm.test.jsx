@@ -7,7 +7,7 @@ vi.mock('../../lib/api', () => ({
   tasks: { create: vi.fn(), update: vi.fn(), show: vi.fn() },
   validationErrors: (e) => (e?.response?.status === 422 ? e.response.data.errors : null),
 }));
-vi.mock('../../AppData', () => ({ useAppData: () => ({ categories: [{ id: 1, name: 'Work' }] }) }));
+vi.mock('../../AppData', () => ({ useAppData: () => ({ categories: [{ id: 1, name: 'Work' }], reloadCategories: vi.fn() }) }));
 vi.mock('react-toastify', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
 
 import { tasks } from '../../lib/api';
