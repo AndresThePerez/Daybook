@@ -1,66 +1,53 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-import ShowNoteComponent from "./components/Notes/ShowNoteComponent";
-import EditNoteComponent from "./components/Notes/EditNoteComponent";
-import CreateNoteComponent from "./components/Notes/CreateNoteComponent";
+import { AppDataProvider, useAppData } from './AppData';
+import AppShell from './components/layout/AppShell';
+import Rail from './components/layout/Rail';
+import TaskList from './features/tasks/TaskList';
+import TaskForm from './features/tasks/TaskForm';
+import TaskDetail from './features/tasks/TaskDetail';
+import CategoryList from './features/categories/CategoryList';
+import CategoryForm from './features/categories/CategoryForm';
+import CategoryDetail from './features/categories/CategoryDetail';
+import HistoryView from './features/history/HistoryView';
 
-import HistoryComponent from "./components/History/HistoryComponent";
+function Shell({ children }) {
+  const { categories } = useAppData();
+  const total = categories.reduce((s, c) => s + (c.tasks_count ?? 0), 0);
+  const rail = (
+    <Rail
+      categories={categories.map((c) => ({ id: c.id, name: c.name, count: c.tasks_count ?? 0 }))}
+      summary={{ total }}
+      today={new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+    />
+  );
+  return <AppShell rail={rail}>{children}</AppShell>;
+}
 
-import CreateCategoryComponent from "./components/Categories/CreateCategoryComponent";
-import EditCategoryComponent from "./components/Categories/EditCategoryComponent";
-import ShowAllCategoriesComponent from "./components/Categories/ShowAllCategoriesComponent";
-import ShowCategoryComponent from "./components/Categories/ShowCategoryComponent";
+function App() {
+  return (
+    <BrowserRouter>
+      <AppDataProvider>
+        <ToastContainer position="bottom-right" theme="light" />
+        <Shell>
+          <Routes>
+            <Route path="/" element={<TaskList />} />
+            <Route path="/tasks/create" element={<TaskForm />} />
+            <Route path="/tasks/:id" element={<TaskDetail />} />
+            <Route path="/tasks/:id/edit" element={<TaskForm />} />
+            <Route path="/categories" element={<CategoryList />} />
+            <Route path="/categories/create" element={<CategoryForm />} />
+            <Route path="/categories/:id" element={<CategoryDetail />} />
+            <Route path="/categories/:id/edit" element={<CategoryForm />} />
+            <Route path="/history" element={<HistoryView />} />
+          </Routes>
+        </Shell>
+      </AppDataProvider>
+    </BrowserRouter>
+  );
+}
 
-import Header from "./components/Base/Header";
-import ShowAllNotesComponent from "./components/Notes/ShowAllNotesComponent";
-import { Container } from "react-bootstrap";
-import { ToastContainer } from "react-toastify";
-
-ReactDOM.render(
-    <Router>
-        {/*static Header*/}
-        <Header />
-
-        <ToastContainer />
-
-        <Container className="mt-5">
-            <Routes>
-                {/*This is also the home page */}
-                <Route path="/" element={<ShowAllNotesComponent />} />
-
-                {/*As per the requirements, added this extra route. Both point to the same component.*/}
-                <Route path="/:id" element={<ShowNoteComponent />} />
-                <Route path="/notes/:id" element={<ShowNoteComponent />} />
-
-                {/*Groups the rest of the note components together.*/}
-                <Route path="/notes/edit/:id" element={<EditNoteComponent />} />
-                <Route path="/notes/create" element={<CreateNoteComponent />} />
-
-                {/*All the Category components can be grouped together.*/}
-                <Route
-                    path="/categories"
-                    element={<ShowAllCategoriesComponent />}
-                />
-                <Route
-                    path="/categories/edit/:id"
-                    element={<EditCategoryComponent />}
-                />
-                <Route
-                    path="/categories/:id"
-                    element={<ShowCategoryComponent />}
-                />
-                <Route
-                    path="/categories/create"
-                    element={<CreateCategoryComponent />}
-                />
-
-                {/*Path to show all 'deleted' notes and categories.*/}
-                <Route path="/history" element={<HistoryComponent />} />
-            </Routes>
-        </Container>
-    </Router>,
-
-    document.getElementById("root")
-);
+createRoot(document.getElementById('root')).render(<App />);
