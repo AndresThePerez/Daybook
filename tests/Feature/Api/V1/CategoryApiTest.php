@@ -59,4 +59,16 @@ class CategoryApiTest extends TestCase
         $this->deleteJson("/api/v1/categories/{$category->id}")->assertNoContent();
         $this->assertSoftDeleted('categories', ['id' => $category->id]);
     }
+
+    public function test_index_includes_active_task_count(): void
+    {
+        $category = \App\Models\Category::factory()->create();
+        \App\Models\Task::factory()->count(2)->for($category)->create();
+        $trashed = \App\Models\Task::factory()->for($category)->create();
+        $trashed->delete();
+
+        $this->getJson('/api/v1/categories')
+            ->assertOk()
+            ->assertJsonPath('data.0.tasks_count', 2);
+    }
 }

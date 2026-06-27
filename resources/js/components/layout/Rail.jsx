@@ -5,7 +5,7 @@ const CAT_COLORS = {
   health: '#4F9E83', finance: '#B0894C', education: '#6E7E55',
 };
 
-export default function Rail({ categories = [], summary = { ephemeral: 0, kept: 0 }, today }) {
+export default function Rail({ categories = [], summary = { total: 0 }, today }) {
   return (
     <aside className="flex flex-col gap-7 border-r border-hairline bg-sunken p-6 md:min-h-screen">
       <div className="font-display text-xl font-extrabold uppercase tracking-[0.22em]">
@@ -16,8 +16,7 @@ export default function Rail({ categories = [], summary = { ephemeral: 0, kept: 
         <div className="text-[11px] uppercase tracking-wider text-ink-faint">Today</div>
         <div className="font-display text-lg font-bold">{today}</div>
         <div className="mt-1.5 text-[12.5px] text-ink-soft">
-          <b className="font-semibold text-ink">{summary.ephemeral}</b> ephemeral ·{' '}
-          <b className="font-semibold text-ink">{summary.kept}</b> kept
+          <b className="font-semibold text-ink">{summary.total}</b> open today
         </div>
       </div>
 

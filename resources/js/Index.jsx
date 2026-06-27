@@ -16,10 +16,11 @@ import HistoryView from './features/history/HistoryView';
 
 function Shell({ children }) {
   const { categories } = useAppData();
+  const total = categories.reduce((s, c) => s + (c.tasks_count ?? 0), 0);
   const rail = (
     <Rail
       categories={categories.map((c) => ({ id: c.id, name: c.name, count: c.tasks_count ?? 0 }))}
-      summary={{ ephemeral: 0, kept: 0 }}
+      summary={{ total }}
       today={new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
     />
   );

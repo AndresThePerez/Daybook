@@ -13,7 +13,7 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        return CategoryResource::collection(Category::latest()->paginate(10));
+        return CategoryResource::collection(Category::withCount(['tasks as tasks_count' => fn ($q) => $q->whereNull('deleted_at')])->latest()->paginate(10));
     }
 
     public function store(StoreCategoryRequest $request)
