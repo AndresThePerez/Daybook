@@ -1,0 +1,37 @@
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import Card from '../../components/ui/Card';
+import Button from '../../components/ui/Button';
+import CategoryTag from '../../components/ui/CategoryTag';
+import TimeBar from '../../components/ui/TimeBar';
+import KeptChip from '../../components/ui/KeptChip';
+import { tasks } from '../../lib/api';
+
+export default function TaskRow({ task, onDeleted }) {
+  async function handleDelete() {
+    if (!window.confirm('Delete this task?')) return;
+    try {
+      await tasks.remove(task.id);
+      toast.success('Task deleted');
+      onDeleted(task.id);
+    } catch {
+      toast.error('Could not delete the task');
+    }
+  }
+  return (
+    <Card className="group grid grid-cols-[110px_1fr_auto] items-center gap-4 px-4 py-4 transition hover:-translate-y-px">
+      <CategoryTag name={task.category?.name ?? '—'} />
+      <Link to={`/tasks/${task.id}`} className="min-w-0">
+        <div className="truncate text-[15.5px] font-semibold text-ink">{task.title}</div>
+        <div className="truncate text-[13.5px] text-ink-soft">{task.body}</div>
+      </Link>
+      <div className="flex items-center gap-4">
+        <div className="opacity-0 transition group-hover:opacity-100 flex gap-1.5">
+          <Link to={`/tasks/${task.id}/edit`}><Button variant="ghost" className="px-3 py-1.5 text-xs">Edit</Button></Link>
+          <Button variant="danger" className="px-3 py-1.5 text-xs" onClick={handleDelete}>Delete</Button>
+        </div>
+        {task.expires_at ? <TimeBar expiresAt={task.expires_at} /> : <KeptChip />}
+      </div>
+    </Card>
+  );
+}
