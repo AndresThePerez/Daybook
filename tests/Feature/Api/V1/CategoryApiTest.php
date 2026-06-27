@@ -3,6 +3,7 @@
 namespace Tests\Feature\Api\V1;
 
 use App\Models\Category;
+use App\Models\Task;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -62,9 +63,9 @@ class CategoryApiTest extends TestCase
 
     public function test_index_includes_active_task_count(): void
     {
-        $category = \App\Models\Category::factory()->create();
-        \App\Models\Task::factory()->count(2)->for($category)->create();
-        $trashed = \App\Models\Task::factory()->for($category)->create();
+        $category = Category::factory()->create();
+        Task::factory()->count(2)->for($category)->create();
+        $trashed = Task::factory()->for($category)->create();
         $trashed->delete();
 
         $this->getJson('/api/v1/categories')
