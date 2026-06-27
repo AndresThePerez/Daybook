@@ -27,9 +27,7 @@ class TaskController extends Controller
 
     public function store(StoreTaskRequest $request)
     {
-        $task = Task::create($request->validated() + [
-            'expires_at' => now()->addHours(12),
-        ]);
+        $task = Task::create(array_merge($request->validated(), ['expires_at' => now()->addHours(12)]));
 
         return TaskResource::make($task)
             ->response()

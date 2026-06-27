@@ -20,7 +20,6 @@ use Illuminate\Notifications\NotificationServiceProvider;
 use Illuminate\Pagination\PaginationServiceProvider;
 use Illuminate\Pipeline\PipelineServiceProvider;
 use Illuminate\Queue\QueueServiceProvider;
-use Illuminate\Redis\RedisServiceProvider;
 use Illuminate\Session\SessionServiceProvider;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Translation\TranslationServiceProvider;
@@ -200,7 +199,6 @@ return [
         PaginationServiceProvider::class,
         PipelineServiceProvider::class,
         QueueServiceProvider::class,
-        RedisServiceProvider::class,
         PasswordResetServiceProvider::class,
         SessionServiceProvider::class,
         TranslationServiceProvider::class,

@@ -15,6 +15,7 @@ class PruneExpiredTasksTest extends TestCase
     {
         $keep = Task::factory()->create(['expires_at' => null]);
         $expired = Task::factory()->expired()->create();
+        $future = Task::factory()->create(['expires_at' => now()->addDay()]);
 
         $this->artisan('tasks:prune')->assertExitCode(0);
 
@@ -22,5 +23,6 @@ class PruneExpiredTasksTest extends TestCase
         $remaining = DB::table('tasks')->pluck('id');
         $this->assertTrue($remaining->contains($keep->id));
         $this->assertFalse($remaining->contains($expired->id));
+        $this->assertTrue($remaining->contains($future->id));
     }
 }

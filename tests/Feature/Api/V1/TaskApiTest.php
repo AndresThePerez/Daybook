@@ -99,4 +99,46 @@ class TaskApiTest extends TestCase
         $this->deleteJson("/api/v1/tasks/{$task->id}")->assertNoContent();
         $this->assertSoftDeleted('tasks', ['id' => $task->id]);
     }
+
+    public function test_show_returns_404_for_expired_task(): void
+    {
+        $task = Task::factory()->expired()->create();
+
+        $this->getJson("/api/v1/tasks/{$task->id}")->assertNotFound();
+    }
+
+    public function test_update_returns_404_for_expired_task(): void
+    {
+        $task = Task::factory()->expired()->create();
+
+        $this->putJson("/api/v1/tasks/{$task->id}", [
+            'category_id' => $task->category_id,
+            'title' => 'New title',
+            'body' => 'New body',
+        ])->assertNotFound();
+    }
+
+    public function test_destroy_returns_404_for_expired_task(): void
+    {
+        $task = Task::factory()->expired()->create();
+
+        $this->deleteJson("/api/v1/tasks/{$task->id}")->assertNotFound();
+    }
+
+    public function test_validation_error_uses_json_envelope(): void
+    {
+        $category = Category::factory()->create();
+
+        $this->postJson('/api/v1/tasks', [
+            'category_id' => $category->id,
+            'body' => 'no title',
+        ])->assertStatus(422)->assertJsonStructure(['message', 'errors' => ['title']]);
+    }
+
+    public function test_missing_resource_uses_json_envelope(): void
+    {
+        $this->getJson('/api/v1/tasks/999')
+            ->assertNotFound()
+            ->assertJsonStructure(['message']);
+    }
 }
