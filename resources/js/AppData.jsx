@@ -1,16 +1,22 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { categories as categoriesApi } from './lib/api';
 
-const AppDataContext = createContext({ categories: [] });
+const AppDataContext = createContext({ categories: [], reloadCategories: () => {} });
 
 export function AppDataProvider({ children }) {
   const [categories, setCategories] = useState([]);
 
-  useEffect(() => {
-    categoriesApi.list().then((res) => setCategories(res.data ?? res)).catch(() => {});
+  const reloadCategories = useCallback(() => {
+    categoriesApi.list().then((res) => setCategories(res.data ?? res)).catch(() => setCategories([]));
   }, []);
 
-  return <AppDataContext.Provider value={{ categories }}>{children}</AppDataContext.Provider>;
+  useEffect(() => { reloadCategories(); }, [reloadCategories]);
+
+  return (
+    <AppDataContext.Provider value={{ categories, reloadCategories }}>
+      {children}
+    </AppDataContext.Provider>
+  );
 }
 
 export function useAppData() {
