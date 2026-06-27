@@ -1,34 +1,20 @@
 import React from "react";
-import { Navbar, Nav, Container } from "react-bootstrap";
-import { LinkContainer } from "react-router-bootstrap";
+import { Link } from "react-router-dom";
 
 const Header = () => {
     return (
-        <Navbar bg="white" expand="lg" className="py-3">
-            <Container>
-                <LinkContainer to="/">
-                    <Navbar.Brand className="me-auto fw-bold">
-                        Basic To-Do List
-                    </Navbar.Brand>
-                </LinkContainer>
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className="ms-auto">
-                        <LinkContainer to="/">
-                            <Nav.Link>Notes</Nav.Link>
-                        </LinkContainer>
-
-                        <LinkContainer to="/categories">
-                            <Nav.Link>Categories</Nav.Link>
-                        </LinkContainer>
-
-                        <LinkContainer to="/history">
-                            <Nav.Link>History</Nav.Link>
-                        </LinkContainer>
-                    </Nav>
-                </Navbar.Collapse>
-            </Container>
-        </Navbar>
+        <nav className="bg-white py-3">
+            <div className="container mx-auto px-4 flex items-center justify-between">
+                <Link to="/" className="font-bold text-lg">
+                    Daybook
+                </Link>
+                <div className="flex gap-4">
+                    <Link to="/">Notes</Link>
+                    <Link to="/categories">Categories</Link>
+                    <Link to="/history">History</Link>
+                </div>
+            </div>
+        </nav>
     );
 };
 

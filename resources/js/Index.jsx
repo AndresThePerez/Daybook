@@ -15,7 +15,6 @@ import ShowCategoryComponent from "./components/Categories/ShowCategoryComponent
 
 import Header from "./components/Base/Header";
 import ShowAllNotesComponent from "./components/Notes/ShowAllNotesComponent";
-import { Container } from "react-bootstrap";
 import { ToastContainer } from "react-toastify";
 
 ReactDOM.render(
@@ -25,7 +24,7 @@ ReactDOM.render(
 
         <ToastContainer />
 
-        <Container className="mt-5">
+        <div className="container mx-auto px-4 mt-20">
             <Routes>
                 {/*This is also the home page */}
                 <Route path="/" element={<ShowAllNotesComponent />} />
@@ -59,7 +58,7 @@ ReactDOM.render(
                 {/*Path to show all 'deleted' notes and categories.*/}
                 <Route path="/history" element={<HistoryComponent />} />
             </Routes>
-        </Container>
+        </div>
     </Router>,
 
     document.getElementById("root")

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Form, Button, Card } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router-dom";
 
 import { toast } from "react-toastify";
@@ -61,25 +60,25 @@ function EditCategoryComponent() {
     };
 
     return (
-        <Card>
-            <Card.Header className="bg-dark text-white">Edit Category</Card.Header>
-            <Card.Body>
-                <Form onSubmit={handleSubmit}>
-                    <Form.Group className="mb-3" controlId="title">
-                        <Form.Label>Name:</Form.Label>
-                        <Form.Control
+        <div className="card">
+            <div className="card-header bg-ink text-white px-4 py-2">Edit Category</div>
+            <div className="card-body p-4">
+                <form onSubmit={handleSubmit}>
+                    <div className="mb-3">
+                        <label htmlFor="title" className="block mb-1">Name:</label>
+                        <input
+                            id="title"
                             type="text"
                             required
                             defaultValue={category.name}
+                            className="w-full border border-hairline rounded px-2 py-1"
                             onChange={(e) => setName(e.target.value)}
                         />
-                    </Form.Group>
-                    <Button variant="primary" type="submit">
-                        Submit
-                    </Button>
-                </Form>
-            </Card.Body>
-        </Card>
+                    </div>
+                    <button type="submit" className="btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
     );
 }
 

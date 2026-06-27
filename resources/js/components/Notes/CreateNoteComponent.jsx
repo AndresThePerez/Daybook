@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Form, Button, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 import { toast } from "react-toastify";
@@ -72,15 +71,17 @@ function CreateNoteComponent() {
     };
 
     return (
-        <Card>
-            <Card.Header className="bg-dark text-white">Create Note</Card.Header>
-            <Card.Body>
-                <Form onSubmit={handleSubmit}>
-                    <Form.Group className="mb-3" controlId="category">
-                        <Form.Label>Choose A Category:</Form.Label>
-                        <Form.Select
+        <div className="card">
+            <div className="card-header bg-ink text-white px-4 py-2">Create Note</div>
+            <div className="card-body p-4">
+                <form onSubmit={handleSubmit}>
+                    <div className="mb-3">
+                        <label htmlFor="category" className="block mb-1">Choose A Category:</label>
+                        <select
+                            id="category"
                             aria-label="Default select"
                             required
+                            className="w-full border border-hairline rounded px-2 py-1"
                             onChange={(e) => setCategory(e.target.value)}
                         >
                             <option>Please select a Category...</option>
@@ -89,35 +90,36 @@ function CreateNoteComponent() {
                                     {category.name}
                                 </option>
                             ))}
-                        </Form.Select>
-                    </Form.Group>
+                        </select>
+                    </div>
 
-                    <Form.Group className="mb-3" controlId="title">
-                        <Form.Label>Note Title:</Form.Label>
-                        <Form.Control
+                    <div className="mb-3">
+                        <label htmlFor="title" className="block mb-1">Note Title:</label>
+                        <input
+                            id="title"
                             type="text"
                             placeholder="Note Title..."
                             required
+                            className="w-full border border-hairline rounded px-2 py-1"
                             onChange={(e) => setTitle(e.target.value)}
                         />
-                    </Form.Group>
+                    </div>
 
-                    <Form.Group className="mb-3" controlId="body">
-                        <Form.Label>Note Body:</Form.Label>
-                        <Form.Control
-                            as="textarea"
+                    <div className="mb-3">
+                        <label htmlFor="body" className="block mb-1">Note Body:</label>
+                        <textarea
+                            id="body"
                             rows={3}
                             required
+                            className="w-full border border-hairline rounded px-2 py-1"
                             onChange={(e) => setBody(e.target.value)}
                         />
-                    </Form.Group>
+                    </div>
 
-                    <Button variant="primary" type="submit">
-                        Submit
-                    </Button>
-                </Form>
-            </Card.Body>
-        </Card>
+                    <button type="submit" className="btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
     );
 }
 

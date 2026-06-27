@@ -1,6 +1,3 @@
-import Table from "react-bootstrap/Table";
-import Button from "react-bootstrap/Button";
-import { Row, Col } from "react-bootstrap";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
@@ -62,63 +59,61 @@ function ShowAllCategoriesComponent() {
 
     return (
         <div className="content-card">
-            <Row className="align-items-center mb-4">
-                <Col>
-                    <h1 className="page-title mb-0">Categories</h1>
-                </Col>
-                <Col xs="auto">
+            <div className="flex items-center mb-4">
+                <h1 className="page-title mb-0 flex-1">Categories</h1>
+                <div>
                     <Link to="/categories/create">
-                        <Button variant="primary">New Category</Button>
+                        <button type="button" className="btn-primary">New Category</button>
                     </Link>
-                </Col>
-            </Row>
-            <Table striped bordered hover className="table-fixed">
+                </div>
+            </div>
+            <table className="table-fixed w-full">
                 <colgroup>
                     {columns.map((col) => (
                         <col key={col.label} style={{ width: col.width }} />
                     ))}
                 </colgroup>
-                <thead className="table-dark">
+                <thead className="bg-ink text-white">
                     <tr>
                         {columns.map((col) => (
-                            <th key={col.label}>{col.label}</th>
+                            <th key={col.label} className="px-3 py-2 text-left">{col.label}</th>
                         ))}
                     </tr>
                 </thead>
                 <tbody>
                     {categories.length
                         ? categories.map((row) => (
-                            <tr key={row.id}>
-                                <td>{row.id}</td>
-                                <td title={row.name}>{row.name}</td>
-                                <td>
-                                    <div className="action-buttons">
+                            <tr key={row.id} className="border-b border-hairline">
+                                <td className="px-3 py-2">{row.id}</td>
+                                <td className="px-3 py-2" title={row.name}>{row.name}</td>
+                                <td className="px-3 py-2">
+                                    <div className="action-buttons flex gap-1">
                                         <Link to={"/categories/" + row.id}>
-                                            <Button variant="outline-primary" size="sm">View</Button>
+                                            <button type="button" className="btn-sm btn-outline-primary">View</button>
                                         </Link>
                                         <Link to={"/categories/edit/" + row.id}>
-                                            <Button variant="outline-warning" size="sm">Edit</Button>
+                                            <button type="button" className="btn-sm btn-outline-warning">Edit</button>
                                         </Link>
-                                        <Button
-                                            variant="outline-danger"
-                                            size="sm"
+                                        <button
+                                            type="button"
+                                            className="btn-sm btn-outline-danger"
                                             onClick={() => handleDelete(row.id)}
                                         >
                                             Delete
-                                        </Button>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
                         ))
                         : (
                             <tr>
-                                <td colSpan={columns.length} className="text-center text-muted py-4">
+                                <td colSpan={columns.length} className="text-center text-ink-soft py-4">
                                     No categories found. Create one to get started!
                                 </td>
                             </tr>
                         )}
                 </tbody>
-            </Table>
+            </table>
         </div>
     );
 }
