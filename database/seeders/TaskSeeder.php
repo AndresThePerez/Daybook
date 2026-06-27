@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class NotesSeeder extends Seeder
+class TaskSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -108,7 +108,7 @@ class NotesSeeder extends Seeder
         ];
 
         foreach ($notes as $note) {
-            DB::table('notes')->insert([
+            DB::table('tasks')->insert([
                 'category_id' => $note['category_id'],
                 'title' => $note['title'],
                 'body' => $note['body'],
@@ -136,7 +136,7 @@ class NotesSeeder extends Seeder
         ];
 
         foreach ($deletedNotes as $note) {
-            DB::table('notes')->insert([
+            DB::table('tasks')->insert([
                 'category_id' => $note['category_id'],
                 'title' => $note['title'],
                 'body' => $note['body'],
