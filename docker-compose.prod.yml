@@ -8,51 +8,15 @@ services:
             - '80:80'
         env_file:
             - .env
-        depends_on:
-            mysql:
-                condition: service_healthy
-            redis:
-                condition: service_healthy
-        networks:
-            - app-network
-
-    mysql:
-        image: 'mysql:8.0'
-        restart: always
-        environment:
-            MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
-            MYSQL_DATABASE: '${DB_DATABASE}'
-            MYSQL_USER: '${DB_USERNAME}'
-            MYSQL_PASSWORD: '${DB_PASSWORD}'
         volumes:
-            - 'mysql-data:/var/lib/mysql'
+            - 'sqlite-data:/var/www/html/database'
         networks:
             - app-network
-        healthcheck:
-            test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${DB_PASSWORD}"]
-            interval: 10s
-            retries: 5
-            timeout: 5s
-
-    redis:
-        image: 'redis:alpine'
-        restart: always
-        volumes:
-            - 'redis-data:/data'
-        networks:
-            - app-network
-        healthcheck:
-            test: ["CMD", "redis-cli", "ping"]
-            interval: 10s
-            retries: 3
-            timeout: 5s
 
 networks:
     app-network:
         driver: bridge
 
 volumes:
-    mysql-data:
-        driver: local
-    redis-data:
+    sqlite-data:
         driver: local

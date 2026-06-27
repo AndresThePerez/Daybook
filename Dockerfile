@@ -5,8 +5,7 @@ RUN apt-get update && apt-get install -y \
     git curl zip unzip libpng-dev libjpeg-dev libfreetype6-dev \
     libonig-dev libxml2-dev libzip-dev nginx supervisor \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip \
-    && pecl install redis && docker-php-ext-enable redis \
+    && docker-php-ext-install pdo_sqlite mbstring exif pcntl bcmath gd zip \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install Composer
@@ -36,6 +35,9 @@ RUN composer dump-autoload --optimize
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+
+# Ensure SQLite database file exists and is writable
+RUN touch database/database.sqlite && chown -R www-data:www-data database
 
 # Nginx config
 COPY docker/nginx.conf /etc/nginx/sites-available/default
