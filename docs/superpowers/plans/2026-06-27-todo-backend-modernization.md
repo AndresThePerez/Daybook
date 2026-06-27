@@ -17,7 +17,9 @@
 - Models are **singular** (`Task`, `Category`). The `tasks` table replaces `notes`.
 - TTL = **12 hours** on records created through the API; seeded/factory records are permanent (`expires_at = null`).
 - Success codes: index/show/update → 200, store → 201, destroy → 204. Validation → 422, missing → 404.
-- Run `./vendor/bin/pint` before every commit; it must report no fixable issues.
+- **Runtime is Sail (Docker), not host PHP.** Every `php artisan`, `composer`, `npm`, `test`, and `pint` command in this plan executes **inside the container**: read `php artisan X` as `./vendor/bin/sail artisan X`, `composer X` as `./vendor/bin/sail composer X`, `npm X` as `./vendor/bin/sail npm X`, `php artisan test` as `./vendor/bin/sail test`, and `./vendor/bin/pint` as `./vendor/bin/sail php vendor/bin/pint`. The PHP version comes from the `runtimes/8.4` image. The container must be up (`./vendor/bin/sail up -d`) before running them.
+- **"Update dependencies" = refresh the Sail image** (`./vendor/bin/sail build --no-cache`) and install inside it. Do NOT run `composer update`/`npm update` or edit version constraints in `composer.json`/`package.json`; `composer.lock`/`package-lock.json` stay unchanged.
+- Run `./vendor/bin/sail php vendor/bin/pint` before every commit; it must report no fixable issues.
 - Commit after every task. Conventional Commit prefixes (`chore:`, `feat:`, `refactor:`, `test:`).
 
 ---
@@ -191,35 +193,43 @@ git add docker-compose.yml
 git commit -m "chore: reduce Sail to a single app service"
 ```
 
-### Task 0.4: Update dependencies and rebuild assets
+### Task 0.4: Refresh the Sail image and install deps inside the container
 
-**Files:**
-- Modify: `composer.lock`, `package-lock.json` (generated)
+**Files:** none tracked (image rebuild + container-local installs). `composer.lock`/`package-lock.json` must remain unchanged.
 
-- [ ] **Step 1: Update Composer dependencies within current constraints.**
-
-Run:
-```bash
-composer update --no-interaction
-```
-Expected: completes; `package:discover` runs without error.
-
-- [ ] **Step 2: Install/refresh and build front-end deps** (still the legacy Bootstrap UI for now).
+- [ ] **Step 1: Build/refresh the Sail image** (pulls the latest `8.4` runtime base).
 
 Run:
 ```bash
-npm install
-npm run build
+./vendor/bin/sail build --no-cache
+./vendor/bin/sail up -d
 ```
-Expected: `public/build/manifest.json` is produced with no errors.
+Expected: image builds; the `laravel.test` container is `Up`.
 
-- [ ] **Step 3: Re-verify migrate+seed and commit lockfiles.**
+- [ ] **Step 2: Install backend + frontend deps inside the container** (from the existing lockfiles — no version bumps).
+
+Run:
+```bash
+./vendor/bin/sail composer install
+./vendor/bin/sail npm install
+./vendor/bin/sail npm run build
+```
+Expected: `public/build/manifest.json` is produced; no errors. Confirm `git status` shows `composer.lock`/`package-lock.json` unchanged.
+
+- [ ] **Step 3: Re-verify migrate+seed inside the container.**
+
+Run:
+```bash
+./vendor/bin/sail artisan migrate:fresh --seed
+```
+Expected: completes without error.
+
+- [ ] **Step 4: Commit** (only if any tracked files changed, e.g. a generated cache/queue/session migration from Task 0.1; otherwise skip).
 
 ```bash
-php artisan migrate:fresh --seed
-./vendor/bin/pint
-git add composer.lock package-lock.json
-git commit -m "chore: update composer and npm dependencies"
+./vendor/bin/sail php vendor/bin/pint
+git add -A
+git commit -m "chore: refresh Sail image and install deps in container"
 ```
 
 ### Task 0.5: Smoke test + browser baseline
