@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daybook — mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;450;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#E8EBF0; --surface:#FFFFFF; --sunken:#DDE2EA;
+    --ink:#191B21; --ink-soft:#626B7D; --ink-faint:#97A0B0;
+    --hairline:#D2D8E1;
+    --ember:#E08A3C; --ember-low:#CF5230; --kept:#2F6F7E;
+    --work:#4C6FB1; --personal:#8A6DB0; --shopping:#C77D4A;
+    --health:#4F9E83; --finance:#B0894C; --education:#6E7E55;
+    --radius:14px;
+    --shadow:0 1px 2px rgba(25,27,33,.04), 0 6px 20px rgba(25,27,33,.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif; font-size:15px; line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .mono{font-family:'IBM Plex Mono',monospace; font-variant-numeric:tabular-nums;}
+  .app{display:grid; grid-template-columns:248px 1fr; min-height:100vh;}
+
+  /* ---------- Rail ---------- */
+  .rail{
+    background:var(--sunken); border-right:1px solid var(--hairline);
+    padding:26px 20px; display:flex; flex-direction:column; gap:26px;
+  }
+  .brand{font-family:'Bricolage Grotesque',sans-serif; font-weight:800;
+    font-size:20px; letter-spacing:.22em; text-transform:uppercase;}
+  .brand .dot{color:var(--ember);}
+  .today-card{
+    background:var(--surface); border:1px solid var(--hairline); border-radius:var(--radius);
+    padding:14px 16px;
+  }
+  .today-card .lbl{font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-faint);}
+  .today-card .date{font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:19px; margin-top:2px;}
+  .today-card .meta{font-size:12.5px; color:var(--ink-soft); margin-top:6px;}
+  .today-card .meta b{color:var(--ink); font-weight:600;}
+
+  .nav-label{font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-faint); padding:0 8px 8px;}
+  .cat{display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:9px; cursor:pointer;
+    font-size:14px; color:var(--ink); transition:background .15s;}
+  .cat:hover{background:#fff;}
+  .cat.active{background:#fff; box-shadow:var(--shadow);}
+  .cat .swatch{width:9px; height:9px; border-radius:3px; flex:0 0 auto;}
+  .cat .name{flex:1;}
+  .cat .count{font-size:12px; color:var(--ink-soft);}
+  .rail .spacer{flex:1;}
+  .history{display:flex; align-items:center; gap:9px; padding:10px; border-top:1px solid var(--hairline);
+    color:var(--ink-soft); font-size:14px; cursor:pointer;}
+  .history:hover{color:var(--ink);}
+
+  /* ---------- Main ---------- */
+  .main{padding:34px 40px 60px; max-width:920px;}
+  .head{display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:26px;}
+  .head h1{font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:38px; letter-spacing:-.01em; line-height:1;}
+  .head .sub{margin-top:8px; font-size:13px; color:var(--ink-soft);}
+  .head .sub .pill{color:var(--ember-low); font-weight:500;}
+  .btn{
+    background:var(--ink); color:#fff; border:none; border-radius:10px;
+    padding:11px 18px; font-size:14px; font-weight:500; cursor:pointer; letter-spacing:.01em;
+    display:inline-flex; align-items:center; gap:8px; box-shadow:var(--shadow);
+  }
+  .btn .plus{font-size:17px; line-height:0;}
+
+  .legend{display:flex; gap:18px; font-size:11.5px; color:var(--ink-soft); margin-bottom:14px; padding-left:2px;}
+  .legend span{display:inline-flex; align-items:center; gap:7px;}
+  .legend .bar-mini{width:26px; height:5px; border-radius:3px; background:linear-gradient(90deg,var(--ember),#f0c08a);}
+  .legend .kept-mini{width:9px;height:9px;border-radius:50%;border:1.5px solid var(--kept);}
+
+  .list{display:flex; flex-direction:column; gap:10px;}
+  .task{
+    background:var(--surface); border:1px solid var(--hairline); border-radius:var(--radius);
+    padding:16px 18px; display:grid; grid-template-columns:120px 1fr 150px; align-items:center; gap:18px;
+    transition:box-shadow .16s, transform .16s, border-color .16s;
+  }
+  .task:hover{box-shadow:var(--shadow); transform:translateY(-1px); border-color:#c4ccd7;}
+  .task .cat-tag{display:flex; align-items:center; gap:8px; font-size:11px; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--ink-soft); font-family:'IBM Plex Mono',monospace;}
+  .task .cat-tag .swatch{width:8px;height:8px;border-radius:3px;flex:0 0 auto;}
+  .task .body .title{font-size:15.5px; font-weight:600; letter-spacing:-.005em;}
+  .task .body .desc{font-size:13.5px; color:var(--ink-soft); margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:42ch;}
+
+  /* time module */
+  .time{display:flex; flex-direction:column; align-items:flex-end; gap:7px;}
+  .time .remain{font-size:12px; font-weight:500;}
+  .ephemeral .remain{color:var(--ember-low);}
+  .track{width:130px; height:6px; border-radius:4px; background:#E7EBF1; overflow:hidden;}
+  .fill{height:100%; border-radius:4px; background:linear-gradient(90deg,var(--ember),#e6a85c);}
+  .urgent .fill{background:linear-gradient(90deg,var(--ember-low),#e07a52); animation:pulse 1.8s ease-in-out infinite;}
+  .urgent .remain{color:var(--ember-low); font-weight:600;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+  @media (prefers-reduced-motion:reduce){.urgent .fill{animation:none}}
+
+  .kept{display:inline-flex; align-items:center; gap:7px; align-self:flex-end;
+    color:var(--kept); font-size:12px; font-weight:500;
+    border:1px solid #BFD6DC; background:#EAF3F4; border-radius:999px; padding:5px 11px;}
+  .kept svg{width:13px;height:13px;}
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- RAIL -->
+  <aside class="rail">
+    <div class="brand">Day<span class="dot">·</span>book</div>
+
+    <div class="today-card">
+      <div class="lbl">Today</div>
+      <div class="date">Fri, Jun 27</div>
+      <div class="meta"><b>6</b> ephemeral · <b>4</b> kept</div>
+    </div>
+
+    <div>
+      <div class="nav-label">Categories</div>
+      <div class="cat active"><span class="swatch" style="background:var(--work)"></span><span class="name">Work</span><span class="count mono">3</span></div>
+      <div class="cat"><span class="swatch" style="background:var(--personal)"></span><span class="name">Personal</span><span class="count mono">2</span></div>
+      <div class="cat"><span class="swatch" style="background:var(--shopping)"></span><span class="name">Shopping</span><span class="count mono">1</span></div>
+      <div class="cat"><span class="swatch" style="background:var(--health)"></span><span class="name">Health</span><span class="count mono">2</span></div>
+      <div class="cat"><span class="swatch" style="background:var(--finance)"></span><span class="name">Finance</span><span class="count mono">2</span></div>
+      <div class="cat"><span class="swatch" style="background:var(--education)"></span><span class="name">Education</span><span class="count mono">2</span></div>
+    </div>
+
+    <div class="spacer"></div>
+    <div class="history">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 8v4l3 2"/></svg>
+      History &amp; recycle bin
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="head">
+      <div>
+        <h1>Today</h1>
+        <div class="sub mono">6 open · <span class="pill">2 expiring soon</span></div>
+      </div>
+      <button class="btn"><span class="plus">+</span> New task</button>
+    </div>
+
+    <div class="legend">
+      <span><span class="bar-mini"></span> time left in its 12h life</span>
+      <span><span class="kept-mini"></span> kept — never expires</span>
+    </div>
+
+    <div class="list">
+      <!-- 1 -->
+      <div class="task">
+        <div class="cat-tag"><span class="swatch" style="background:var(--work)"></span>Work</div>
+        <div class="body">
+          <div class="title">Q2 Sprint Planning</div>
+          <div class="desc">Prepare backlog items and estimate story points for the next sprint cycle</div>
+        </div>
+        <div class="time ephemeral">
+          <div class="remain mono">9h 12m left</div>
+          <div class="track"><div class="fill" style="width:76%"></div></div>
+        </div>
+      </div>
+      <!-- 2 -->
+      <div class="task">
+        <div class="cat-tag"><span class="swatch" style="background:var(--work)"></span>Work</div>
+        <div class="body">
+          <div class="title">Update API Documentation</div>
+          <div class="desc">Document the new endpoints for the user management module</div>
+        </div>
+        <div class="time ephemeral">
+          <div class="remain mono">5h 02m left</div>
+          <div class="track"><div class="fill" style="width:42%"></div></div>
+        </div>
+      </div>
+      <!-- 3 kept -->
+      <div class="task">
+        <div class="cat-tag"><span class="swatch" style="background:var(--health)"></span>Health</div>
+        <div class="body">
+          <div class="title">Morning Run Schedule</div>
+          <div class="desc">Run 3 miles on Monday, Wednesday, Friday before work</div>
+        </div>
+        <div class="time">
+          <span class="kept"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="5" r="2.5"/><path d="M12 22V8M5 12H2a10 10 0 0 0 20 0h-3"/></svg> Kept</span>
+        </div>
+      </div>
+      <!-- 4 -->
+      <div class="task">
+        <div class="cat-tag"><span class="swatch" style="background:var(--shopping)"></span>Shop</div>
+        <div class="body">
+          <div class="title">Grocery Run</div>
+          <div class="desc">Eggs, milk, bread, chicken, spinach, olive oil, and coffee beans</div>
+        </div>
+        <div class="time ephemeral">
+          <div class="remain mono">2h 18m left</div>
+          <div class="track"><div class="fill" style="width:19%"></div></div>
+        </div>
+      </div>
+      <!-- 5 kept -->
+      <div class="task">
+        <div class="cat-tag"><span class="swatch" style="background:var(--finance)"></span>Finance</div>
+        <div class="body">
+          <div class="title">Review Monthly Budget</div>
+          <div class="desc">Check spending against budget categories and adjust savings goals</div>
+        </div>
+        <div class="time">
+          <span class="kept"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="5" r="2.5"/><path d="M12 22V8M5 12H2a10 10 0 0 0 20 0h-3"/></svg> Kept</span>
+        </div>
+      </div>
+      <!-- 6 urgent -->
+      <div class="task">
+        <div class="cat-tag"><span class="swatch" style="background:var(--personal)"></span>Personal</div>
+        <div class="body">
+          <div class="title">Plan Weekend Hike</div>
+          <div class="desc">Research trails near Mt. Rainier, pack gear and check weather forecast</div>
+        </div>
+        <div class="time ephemeral urgent">
+          <div class="remain mono">42m left</div>
+          <div class="track"><div class="fill" style="width:6%"></div></div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>
