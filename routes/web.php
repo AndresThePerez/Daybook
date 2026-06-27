@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//so routing doesn't get funky between client and server side.
+// so routing doesn't get funky between client and server side.
 Route::get('/{any}', function () {
     return view('welcome');
 })->where('any', '.*');

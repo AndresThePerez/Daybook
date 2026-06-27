@@ -4,11 +4,9 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Str;
 
 class NotesRequest extends FormRequest
 {
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -19,10 +17,9 @@ class NotesRequest extends FormRequest
         return [
             'category_id' => 'required',
             'title' => ['required', Rule::unique('notes')->ignore($this->id)],
-            'body' => 'required'
+            'body' => 'required',
         ];
     }
-
 
     /**
      * Get the error messages for the defined validation rules.
@@ -35,7 +32,7 @@ class NotesRequest extends FormRequest
             'category.required' => 'The category field is required.',
             'title.required' => 'The requested note\'s title is required.',
             'title.unique' => 'The title of the note must be unique.',
-            'body.required' => 'The body of the note is required.'
+            'body.required' => 'The body of the note is required.',
         ];
     }
 
@@ -48,7 +45,7 @@ class NotesRequest extends FormRequest
     {
         $this->merge([
             'title' => strip_tags($this->title),
-            'body' => strip_tags($this->body)
+            'body' => strip_tags($this->body),
         ]);
     }
 }

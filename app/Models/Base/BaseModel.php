@@ -26,7 +26,6 @@ class BaseModel extends Model
         'deleted_at' => 'datetime:Y-m-d h:i A',
     ];
 
-
     public function history()
     {
         return self::onlyTrashed()->get();

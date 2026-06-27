@@ -2,9 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class CategoriesRequest extends FormRequest
 {
@@ -16,7 +15,7 @@ class CategoriesRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', Rule::unique('categories')->ignore($this->id)]
+            'name' => ['required', Rule::unique('categories')->ignore($this->id)],
         ];
     }
 

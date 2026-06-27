@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers\Base;
 
+use Illuminate\Http\Response;
+
 class BaseController extends Controller
 {
-
     private $model;
 
     /**
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show($id)
     {
         $entity = $this->getModel()::findOrFail($id);
-        if (!$entity) {
+        if (! $entity) {
             return response('Could not find the requested Resource', 404);
         }
 
@@ -27,7 +28,7 @@ class BaseController extends Controller
      * Soft Delete a resource in the database
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function delete($id)
     {
@@ -37,9 +38,9 @@ class BaseController extends Controller
             return response('Could not find the requested Resource', 404);
         }
 
-        if (!$entity->delete()) {
+        if (! $entity->delete()) {
             return response('Error deleting requested resource', 500);
-        };
+        }
 
         return response('Success', 200);
     }
@@ -48,7 +49,7 @@ class BaseController extends Controller
      * Read all resources in the database
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function showAll()
     {
@@ -59,25 +60,23 @@ class BaseController extends Controller
      * Soft Delete all resource in the database
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function history()
     {
         return $this->getModel()->history();
     }
 
-
     /**
      * Soft Delete all resource in the database
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroyAll()
     {
         return $this->getModel()::get()->delete();
     }
-
 
     protected function setModel($value)
     {
