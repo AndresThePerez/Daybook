@@ -5,9 +5,9 @@ export default {
     extend: {
       colors: {
         paper: '#E8EBF0', surface: '#FFFFFF', sunken: '#DDE2EA',
-        ink: { DEFAULT: '#191B21', soft: '#626B7D', faint: '#97A0B0' },
+        ink: { DEFAULT: '#191B21', soft: '#565E6E', faint: '#5B6273' },
         hairline: '#D2D8E1',
-        ember: { DEFAULT: '#E08A3C', low: '#CF5230' },
+        ember: { DEFAULT: '#E08A3C', low: '#BD4119' },
         kept: '#2F6F7E',
         cat: {
           work: '#4C6FB1', personal: '#8A6DB0', shopping: '#C77D4A',
